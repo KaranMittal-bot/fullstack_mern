@@ -1,0 +1,75 @@
+*{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+h3{
+    color: purple;
+}
+
+h1{
+    color: #b92b27 !important;
+}
+
+#login{
+    background-color: blueviolet;
+    color: white;
+}
+
+#signup{
+    background-color: blueviolet;
+    color: white;
+}
+
+.follow{
+    text-decoration: none;
+}
+
+.upvote{
+    color: rgb(49, 179, 49);
+    background-color: black;
+}
+
+p a{
+    color: white;
+    text-decoration: none;
+    background-color: crimson;
+}
+
+p + h3{
+    text-decoration: black underline;
+}
+
+div > input{
+    
+    color: black;
+}
+
+input[type="text"]{
+    color: red;
+}
+
+input[type="password"]{
+    color: yellow;
+}
+
+#myID p{
+    color: green;
+}
+
+button:hover{
+    background-color: black;
+    color: white;
+}
+
+button[type="submit"]:active{
+    background-color: forestgreen;
+    color: white;
+}
+
+#yes:checked + label{
+    color: green;
+}
+
+main p::first-letter{
+    font-size: 200%;
+    color: red;
+}

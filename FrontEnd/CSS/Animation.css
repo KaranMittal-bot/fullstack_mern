@@ -1,0 +1,32 @@
+.box{
+    height: 100px;
+    width: 300px;
+    background-color: yellow;
+}
+
+@keyframes Karan{
+    from {font-size: 20px;}
+    to{font-size: 40px;}
+}
+
+.box{
+    animation-name: Karan , ColorChange;
+    animation-duration: 2s;
+    animation-delay: 0.5s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: 3;
+    animation-direction: normal;
+
+    /* shorthand */
+
+    /* animation: Karan 2s ease-in infinite normal; */
+}
+
+@keyframes ColorChange{
+    from{
+        background-color: yellow;
+    }
+    to{
+        background-color: yellowgreen;
+    }
+}

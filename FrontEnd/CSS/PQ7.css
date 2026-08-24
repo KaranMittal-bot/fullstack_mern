@@ -1,0 +1,32 @@
+#outer{
+    height: 400px;
+    width: 400px;
+    background-color: yellow;
+    border-radius: 50%;
+}
+
+.lefteyes , .righteyes{
+    height: 50px;
+    width: 50px;
+    display: inline-block;
+    background-color: black;
+    border-radius: 50%;
+   position: absolute;
+
+   top: 90px;
+   left: 100px;
+}
+
+.righteyes{
+    left: 250px;
+}
+
+.smile{
+    width: 200px;
+    height: 75px;
+    background-color: black;
+    border-radius: 0% 0% 50% 50%;
+    position: absolute;
+    top: 250px;
+    left: 100px;
+}

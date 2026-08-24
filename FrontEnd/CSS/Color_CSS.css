@@ -1,0 +1,11 @@
+h1{
+    color: red; /**either we can write color name directly*/
+}
+
+p{
+    color: #0000f0; /** Or we can write the # code*/
+}
+
+h2{
+    color: rgb(7, 8, 6);    /** or we can use the RGB*/
+}

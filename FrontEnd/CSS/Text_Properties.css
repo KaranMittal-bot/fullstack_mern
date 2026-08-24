@@ -1,0 +1,18 @@
+h1{
+    text-align: center;   /** put's the text in centre according to the parent*/
+    font-weight: 400;       /** can vary from 100-900*/
+    text-decoration:red underline;    /**provides a colored underline below the text*/
+    line-height: 2%;
+}
+
+p{
+    text-align: left;        /** put's the text in left according to the parent*/
+    font-weight: bold;      /**Makes the font more bolder*/
+    text-decoration: line-through;
+}
+
+h2{
+    text-align: right;       /** put's the text in right according to the parent*/
+    font-weight: lighter;   /** decreases the boldness/weight of a font*/
+    text-decoration: wavy overline;
+}

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jyotish Daily Sadhana</title>
+<style>
+:root {
+  --bg: #0a0a0f;
+  --card: #12121e;
+  --border: rgba(180,140,60,0.25);
+  --gold: #c9a84c;
+  --gold2: #e8c97a;
+  --gold3: #f5e4a8;
+  --text: #e8e0d0;
+  --text2: #a89880;
+  --text3: #6a5e4e;
+  --done: #3a6b47;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Georgia, 'Times New Roman', serif;
+  min-height: 100vh;
+  padding: 32px 16px 80px;
+}
+
+.container { max-width: 820px; margin: 0 auto; }
+
+.header { text-align:center; margin-bottom:36px; }
+.header-icons { font-size:1.8rem; margin-bottom:8px; letter-spacing:0.3em; }
+.header h1 {
+  font-size: clamp(1.3rem, 4vw, 2rem);
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  background: linear-gradient(135deg, #c9a84c, #f5e4a8, #c9a84c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 6px;
+}
+.header p { color: var(--text2); font-style:italic; font-size:0.95rem; }
+.gold-line {
+  height:1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 20px auto;
+  max-width: 320px;
+}
+
+.pills { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin-bottom:36px; }
+.pill {
+  background: rgba(180,140,60,0.08);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 4px 14px;
+  font-size: 0.8rem;
+  color: var(--gold2);
+  letter-spacing:0.03em;
+}
+
+.section-label {
+  text-align:center;
+  font-size:0.75rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color: var(--text3);
+  margin-bottom:14px;
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 36px;
+}
+
+.day-btn {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 4px 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--text);
+}
+.day-btn:hover {
+  border-color: rgba(200,168,76,0.7);
+  background: rgba(180,140,60,0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+.day-btn.active {
+  border-color: var(--gold) !important;
+  background: rgba(180,140,60,0.16) !important;
+  box-shadow: 0 0 20px rgba(180,140,60,0.25);
+}
+.day-sym { font-size:1.5rem; line-height:1; }
+.day-name-txt { font-size:0.7rem; color:var(--text2); font-family:monospace; letter-spacing:0.05em; }
+.day-btn.active .day-name-txt { color:var(--gold2); }
+.day-planet-txt { font-size:0.62rem; color:var(--gold); font-style:italic; }
+
+.progress-wrap { margin-bottom:28px; }
+.progress-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.progress-label { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--text3); }
+.progress-num { font-family:monospace; font-size:0.9rem; color:var(--gold2); }
+.progress-track {
+  height: 7px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 100px;
+  overflow:hidden;
+}
+.progress-fill {
+  height:100%;
+  border-radius:100px;
+  background: linear-gradient(90deg, var(--gold), var(--gold3));
+  box-shadow: 0 0 10px rgba(200,168,76,0.5);
+  transition: width 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  width:0%;
+}
+.complete-msg {
+  text-align:center;
+  color:var(--gold2);
+  font-style:italic;
+  font-size:0.95rem;
+  padding:10px;
+  opacity:0;
+  transition:opacity 0.4s;
+}
+.complete-msg.show { opacity:1; }
+
+.day-card {
+  background: linear-gradient(135deg, rgba(180,140,60,0.07), rgba(100,80,140,0.07));
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px 24px;
+  margin-bottom: 24px;
+  position:relative;
+  overflow:hidden;
+}
+.day-card-sym {
+  position:absolute;
+  right:20px; top:50%;
+  transform:translateY(-50%);
+  font-size:3rem;
+  opacity:0.2;
+  pointer-events:none;
+}
+.day-card h2 {
+  font-size:clamp(1rem, 3vw, 1.5rem);
+  color: var(--gold2);
+  margin-bottom:6px;
+  letter-spacing:0.03em;
+}
+.day-card p { color:var(--text2); font-style:italic; font-size:0.9rem; line-height:1.5; max-width:88%; }
+
+.category { margin-bottom:22px; }
+.cat-header {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:12px;
+}
+.cat-icon { font-size:1rem; }
+.cat-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--gold2); font-weight:bold; }
+.cat-count { margin-left:auto; font-family:monospace; font-size:0.75rem; color:var(--text3); }
+
+.task {
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:14px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid transparent;
+  border-radius:12px;
+  margin-bottom:8px;
+  cursor:pointer;
+  transition:all 0.2s ease;
+}
+.task:hover {
+  border-color: rgba(200,168,76,0.4);
+  border-left-color: rgba(200,168,76,0.6);
+  transform:translateX(3px);
+}
+.task.done {
+  opacity:0.55;
+  border-left-color: var(--done);
+  background: rgba(58,107,71,0.06);
+  border-color: rgba(58,107,71,0.3);
+}
+
+.chk {
+  width:22px; height:22px; min-width:22px;
+  border: 1.5px solid var(--text3);
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:1px;
+  transition:all 0.2s;
+  flex-shrink:0;
+}
+.task.done .chk {
+  background: var(--done);
+  border-color: var(--done);
+  box-shadow: 0 0 8px rgba(58,107,71,0.5);
+}
+.chk svg { opacity:0; transition:opacity 0.2s; }
+.task.done .chk svg { opacity:1; }
+
+.task-body { flex:1; min-width:0; }
+.task-title {
+  font-size:0.97rem;
+  font-weight:500;
+  color:var(--text);
+  margin-bottom:3px;
+  line-height:1.4;
+}
+.task.done .task-title { text-decoration:line-through; color:var(--text3); }
+.task-desc { font-size:0.83rem; color:var(--text2); font-style:italic; line-height:1.5; }
+.task.done .task-desc { color:var(--text3); }
+
+.task-tag {
+  font-family:monospace;
+  font-size:0.63rem;
+  padding:2px 8px;
+  border-radius:100px;
+  background: rgba(180,140,60,0.1);
+  border:1px solid rgba(180,140,60,0.2);
+  color:var(--gold);
+  white-space:nowrap;
+  flex-shrink:0;
+  align-self:flex-start;
+  margin-top:2px;
+}
+
+.reset-btn {
+  display:block;
+  margin: 28px auto 0;
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:100px;
+  padding:10px 28px;
+  color:var(--text3);
+  font-family:Georgia,serif;
+  font-size:0.88rem;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.reset-btn:hover { border-color:rgba(200,168,76,0.5); color:var(--gold2); }
+
+@media(max-width:500px){
+  .days-grid { gap:4px; }
+  .day-btn { padding:8px 2px 7px; border-radius:8px; }
+  .day-sym { font-size:1.2rem; }
+  .day-name-txt { font-size:0.58rem; }
+  .day-planet-txt { display:none; }
+  .day-card-sym { display:none; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="header-icons">☽ ✦ ☀</div>
+    <h1>Jyotish Daily Sadhana</h1>
+    <p>Vedic Remedies &amp; Daily Practice Tracker</p>
+    <div class="gold-line"></div>
+  </div>
+
+  <div class="pills">
+    <span class="pill">♓ Pisces Lagna</span>
+    <span class="pill">☽ Moon Atmakaraka</span>
+    <span class="pill">♀ Venus Amatyakaraka</span>
+    <span class="pill">☉ Sun Darakaraka</span>
+    <span class="pill">☿ Vargottama Mercury</span>
+    <span class="pill">♄ Saturn Mahadasha</span>
+  </div>
+
+  <div class="section-label">✦ Select Your Day ✦</div>
+  <div class="days-grid" id="daysGrid"></div>
+
+  <div class="progress-wrap">
+    <div class="progress-top">
+      <span class="progress-label">Today's Sadhana Progress</span>
+      <span class="progress-num" id="progNum">0 / 0</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progFill"></div>
+    </div>
+    <div class="complete-msg" id="completeMsg">✦ Sadhana Complete — Saturn is Pleased ✦</div>
+  </div>
+
+  <div id="dayContent"></div>
+  <button class="reset-btn" onclick="resetDay()">↺ Reset This Day's Progress</button>
+
+</div>
+<script>
+var DAYS=[
+  {short:'SUN',sym:'☀',planet:'Surya'},
+  {short:'MON',sym:'☽',planet:'Chandra'},
+  {short:'TUE',sym:'♂',planet:'Mangal'},
+  {short:'WED',sym:'☿',planet:'Budha'},
+  {short:'THU',sym:'♃',planet:'Guru'},
+  {short:'FRI',sym:'♀',planet:'Shukra'},
+  {short:'SAT',sym:'♄',planet:'Shani+Rahu'},
+];
+
+var CORE=[
+  {id:'c1',title:'Wake before sunrise',desc:"Saturn MD demands early rising — discipline around time is Saturn's language",tag:'Saturn'},
+  {id:'c2',title:'Surya Namaskar — 12 rounds at sunrise',desc:'Face East. Most powerful Sun remedy. 10–15 minutes. Non-negotiable daily',tag:'Sun'},
+  {id:'c3',title:'Arghya — offer water to the rising Sun',desc:'Recite "Om Suryaya Namah" while offering water toward the Sun each morning',tag:'Sun'},
+  {id:'c4',title:'Meditation — 15–20 minutes of silence',desc:'No music, no phone. Moon Atmakaraka requires genuine daily stillness to function',tag:'Moon AK'},
+  {id:'c5',title:'Write something — minimum 10 minutes',desc:'Journal, ideas, code notes, analysis. Strengthens your weakest planet Mercury every day',tag:'Mercury'},
+  {id:'c6',title:'Physical exercise — 30–45 minutes',desc:'Non-negotiable for Mars retrograde in 2nd. Prevents inward-turned anger and impulsiveness',tag:'Mars ℞'},
+  {id:'c7',title:'Help or serve someone today',desc:"D60 past-life ambition karma is balanced through daily seva — your most important remedy",tag:'Saturn D60'},
+  {id:'c8',title:'No screens 1 hour before sleep',desc:'Protects your Gemini Moon Atmakaraka from excessive stimulation before rest',tag:'Moon AK'},
+];
+
+var DAY_DATA={
+  0:{title:'Sunday — Surya Sadhana',desc:"Day of the Sun, your strongest planet (Shadbala #1) and Darakaraka. Honor it fully today.",sym:'☀',cats:[
+    {icon:'🔥',title:'Sun Mantra Practice',tasks:[
+      {id:'su1',title:'Aditya Hridayam — full recitation',desc:"The Sun's supreme hymn. Most powerful on Sundays. Use a physical copy or find it online",tag:'Mantra'},
+      {id:'su2',title:'"Om Suryaya Namah" — 108x on mala',desc:'Mala recitation at sunrise or during your morning practice session',tag:'Japa'},
+    ]},
+    {icon:'✨',title:'Sunday Remedies',tasks:[
+      {id:'su3',title:'Wear copper or gold today',desc:"Sun's metals. Even a copper bracelet activates solar energy on Sundays",tag:'Yantra'},
+      {id:'su4',title:'Eat wheat or jaggery today',desc:"Sun's foods. Honor the solar diet on Sundays",tag:'Ahara'},
+      {id:'su5',title:'Contemplate: What is my true dharma?',desc:"Sun + Mercury in Scorpio 9th asks — what do I truly believe? What is my purpose?",tag:'Reflection'},
+    ]},
+  ]},
+  1:{title:'Monday — Chandra Sadhana',desc:"Day of Moon — your Atmakaraka. The most spiritually significant day of your entire week.",sym:'☽',cats:[
+    {icon:'🌙',title:'Moon Mantra Practice',tasks:[
+      {id:'mo1',title:'"Om Shram Shreem Shroum Sah Chandramase Namah" — 108x',desc:'Chandra Beej Mantra. Monday morning recitation is most potent for this mantra',tag:'Japa'},
+      {id:'mo2',title:'Extended meditation — 30 minutes today',desc:"Monday meditation is doubled in power. Go deeper than usual — Atmakaraka's day",tag:'Moon AK'},
+    ]},
+    {icon:'💧',title:'Monday Remedies',tasks:[
+      {id:'mo3',title:'Spend time near water',desc:'River, lake, fountain — even sitting by flowing water. Moon needs water contact',tag:'Remedy'},
+      {id:'mo4',title:'Eat white sattvic foods — milk, rice, coconut',desc:"Moon's foods. Avoid heavy or rajasic food on Mondays if possible",tag:'Ahara'},
+      {id:'mo5',title:"Emotional check-in — process don't suppress",desc:'Your Gemini Moon runs restless. Today: notice emotions without reacting to them',tag:'Inner Work'},
+      {id:'mo6',title:'Wear pearl or moonstone today',desc:'Stabilizes your restless Gemini Moon Atmakaraka energy throughout the day',tag:'Gemstone'},
+    ]},
+  ]},
+  2:{title:'Tuesday — Mangal Sadhana',desc:"Day of Mars — your 2nd house financial engine in own sign Aries. Direct this energy consciously.",sym:'♂',cats:[
+    {icon:'⚔️',title:'Mars Mantra Practice',tasks:[
+      {id:'tu1',title:'"Om Kram Kreem Kroum Sah Bhaumaya Namah" — 108x',desc:'Mangal Beej Mantra. Recite with strength and focus — Mars responds to intensity',tag:'Japa'},
+    ]},
+    {icon:'💪',title:'Tuesday Remedies',tasks:[
+      {id:'tu2',title:'Most intense workout of the week',desc:'Mars days demand maximum physical output. Push harder today than any other day',tag:'Mars ℞'},
+      {id:'tu3',title:'Financial discipline audit',desc:'Review expenses, savings, investments. Retrograde Mars 2nd needs conscious money management',tag:'Artha'},
+      {id:'tu4',title:'Watch words and avoid impulsive decisions',desc:'Mars retrograde 2nd = impulsive speech and financial karma. Pause before acting today',tag:'Karma'},
+      {id:'tu5',title:'Eat red lentils or masoor dal today',desc:'Mars food remedy. Simple but classically effective',tag:'Ahara'},
+    ]},
+  ]},
+  3:{title:'Wednesday — Budha Sadhana',desc:"Day of Mercury — your Vargottama planet across D1/D9/D10. Most important day to strengthen your weakest planet.",sym:'☿',cats:[
+    {icon:'✍️',title:'Mercury Mantra Practice',tasks:[
+      {id:'we1',title:'"Om Bram Breem Broum Sah Budhaya Namah" — 108x',desc:"Budha Beej Mantra. Wednesday recitation is most potent — Mercury's own day",tag:'Japa'},
+    ]},
+    {icon:'🧠',title:'Mercury Strengthening — Most Critical Day',tasks:[
+      {id:'we2',title:'Deep writing session — minimum 30 minutes',desc:'Scorpio Mercury thrives in depth not breadth. Analyse, investigate, document something meaningful',tag:'Mercury'},
+      {id:'we3',title:'Study something technical or deep',desc:'Read a technical book, research paper, or deep article. Feed your Vargottama Mercury',tag:'Vidya'},
+      {id:'we4',title:'Code, build, or solve an analytical problem',desc:'Mercury in D10 11th gains through intellectual work. Wednesday is your prime building day',tag:'D10'},
+      {id:'we5',title:'Wear green or emerald color today',desc:"Mercury's color. Even green clothing activates mercurial energy on Wednesdays",tag:'Remedy'},
+    ]},
+  ]},
+  4:{title:'Thursday — Guru Sadhana',desc:"Day of Jupiter — your 8th house hidden wisdom and transformational wealth planet. Honor the Guru.",sym:'♃',cats:[
+    {icon:'🙏',title:'Jupiter Mantra Practice',tasks:[
+      {id:'th1',title:'"Om Gram Greem Groum Sah Gurave Namah" — 108x',desc:'Guru Beej Mantra. Thursday morning recitation strengthens Jupiter in 8th house',tag:'Japa'},
+    ]},
+    {icon:'📚',title:'Thursday Remedies',tasks:[
+      {id:'th2',title:'Respect a teacher or elder genuinely today',desc:'Jupiter karma responds directly to how you treat wisdom-holders. Call, visit, or acknowledge one',tag:'Guru Seva'},
+      {id:'th3',title:'Study Vedic astrology, philosophy or sacred text',desc:'Jupiter in 8th rewards deep hidden knowledge. Thursday is your wisdom pursuit day',tag:'Vidya'},
+      {id:'th4',title:'Fast or eat only sattvic vegetarian food',desc:'Thursday fast or simple meal strengthens Jupiter energy significantly',tag:'Ahara'},
+      {id:'th5',title:'Donate — to a teacher, student, or charity',desc:'Jupiter karma is activated through generosity with knowledge and resources',tag:'Dana'},
+    ]},
+  ]},
+  5:{title:'Friday — Shukra Sadhana',desc:"Day of Venus — your Amatyakaraka in 10th house. Career, beauty, and abundance. Activate it.",sym:'♀',cats:[
+    {icon:'🌸',title:'Venus Mantra Practice',tasks:[
+      {id:'fr1',title:'"Om Dram Dreem Droum Sah Shukraya Namah" — 108x',desc:"Shukra Beej Mantra. Friday is Venus day — your career planet's most powerful activation day",tag:'Japa'},
+    ]},
+    {icon:'🎨',title:'Friday Remedies',tasks:[
+      {id:'fr2',title:'Create something — art, music, design, or writing',desc:'Venus Amatyakaraka needs weekly creative expression. Non-negotiable on Fridays',tag:'Venus'},
+      {id:'fr3',title:'Beautify your living or work space',desc:'Clean, organize, add something aesthetic. Venus responds powerfully to beautiful environments',tag:'Remedy'},
+      {id:'fr4',title:'Career planning, portfolio work, or networking',desc:'Venus D10 6th + D1 10th — Fridays are for consciously building your professional identity',tag:'Career'},
+      {id:'fr5',title:'Wear white, cream, or pink today',desc:"Venus colors. White sapphire or opal if you have them",tag:'Gemstone'},
+      {id:'fr6',title:'Experience something beautiful — music, art, or nature',desc:'Venus needs beauty as fuel. This is planetary maintenance, not laziness',tag:'Sukha'},
+    ]},
+  ]},
+  6:{title:'Saturday — Shani & Rahu Sadhana',desc:"Day of Saturn (your Mahadasha lord) and Rahu (your 1st house lord). Most important day of your entire week.",sym:'♄',cats:[
+    {icon:'🪐',title:'Saturn & Rahu Mantra Practice',tasks:[
+      {id:'sa1',title:'"Om Pram Preem Proum Sah Shanaischaraya Namah" — 108x',desc:"Shani Beej Mantra. Saturn is your Mahadasha lord — Saturday recitation is completely non-negotiable",tag:'Japa'},
+      {id:'sa2',title:'"Om Bhram Bhreem Bhroum Sah Rahave Namah" — 108x',desc:"Rahu Beej Mantra. Rahu is in your Lagna — honor it on its own day",tag:'Japa'},
+    ]},
+    {icon:'⚫',title:'Saturday Remedies — Most Critical',tasks:[
+      {id:'sa3',title:'Feed black sesame seeds or black dal to birds or the poor',desc:'Most classical Saturn remedy. Do this every single Saturday without exception. Never skip',tag:'Saturn'},
+      {id:'sa4',title:'Genuine seva — serve someone less fortunate',desc:'D60 past-life ambition karma is balanced through Saturday service. Your single most important remedy',tag:'Karma'},
+      {id:'sa5',title:'Feed stray dogs or street animals',desc:"Rahu in Pisces 1st — dogs are Rahu's animals. Feeding them directly appeases your Lagna Rahu",tag:'Rahu'},
+      {id:'sa6',title:'Wear dark blue or black today',desc:"Saturn's colors on Saturn's day",tag:'Remedy'},
+      {id:'sa7',title:'Honest self-audit: Where am I lazy or cutting corners?',desc:"Saturn's deepest question for your chart. Sit with it honestly every Saturday without excuses",tag:'Inner Work'},
+    ]},
+  ]},
+};
+
+var selDay=new Date().getDay();
+var saved={};
+try{saved=JSON.parse(localStorage.getItem('sadhana_v3')||'{}');}catch(e){}
+
+function key(d,id){return d+'_'+id;}
+function isDone(d,id){return !!saved[key(d,id)];}
+function toggle(d,id){saved[key(d,id)]=!saved[key(d,id)];try{localStorage.setItem('sadhana_v3',JSON.stringify(saved));}catch(e){}renderAll();}
+function selectDay(d){selDay=d;renderAll();}
+function resetDay(){Object.keys(saved).forEach(function(k){if(k.startsWith(selDay+'_'))delete saved[k];});try{localStorage.setItem('sadhana_v3',JSON.stringify(saved));}catch(e){}renderAll();}
+
+function allTasks(d){var a=CORE.slice();DAY_DATA[d].cats.forEach(function(c){c.tasks.forEach(function(t){a.push(t);});});return a;}
+
+function taskHTML(d,t){
+  var done=isDone(d,t.id);
+  return '<div class="task'+(done?' done':'')+'" onclick="toggle('+d+',\''+t.id+'\')">'
+    +'<div class="chk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9.5 10.5,2.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'
+    +'<div class="task-body"><div class="task-title">'+t.title+'</div><div class="task-desc">'+t.desc+'</div></div>'
+    +'<span class="task-tag">'+t.tag+'</span>'
+    +'</div>';
+}
+
+function renderAll(){
+  // Days
+  var gh='';
+  for(var i=0;i<7;i++){
+    var d=DAYS[i];
+    gh+='<button class="day-btn'+(i===selDay?' active':'')+'" onclick="selectDay('+i+')">'
+      +'<span class="day-sym">'+d.sym+'</span>'
+      +'<span class="day-name-txt">'+d.short+'</span>'
+      +'<span class="day-planet-txt">'+d.planet+'</span>'
+      +'</button>';
+  }
+  document.getElementById('daysGrid').innerHTML=gh;
+
+  // Progress
+  var all=allTasks(selDay);
+  var total=all.length;
+  var done=all.filter(function(t){return isDone(selDay,t.id);}).length;
+  var pct=total?Math.round(done/total*100):0;
+  document.getElementById('progNum').textContent=done+' / '+total;
+  document.getElementById('progFill').style.width=pct+'%';
+  var cm=document.getElementById('completeMsg');
+  cm.className='complete-msg'+(done===total&&total>0?' show':'');
+
+  // Content
+  var dd=DAY_DATA[selDay];
+  var html='<div class="day-card">'
+    +'<h2>'+dd.title+'</h2>'
+    +'<p>'+dd.desc+'</p>'
+    +'<span class="day-card-sym">'+dd.sym+'</span>'
+    +'</div>';
+
+  // Core tasks
+  var coreDone=CORE.filter(function(t){return isDone(selDay,t.id);}).length;
+  html+='<div class="category"><div class="cat-header">'
+    +'<span class="cat-icon">🌅</span>'
+    +'<span class="cat-title">Daily Core Practice</span>'
+    +'<span class="cat-count">'+coreDone+' / '+CORE.length+'</span>'
+    +'</div>';
+  CORE.forEach(function(t){html+=taskHTML(selDay,t);});
+  html+='</div>';
+
+  // Day-specific categories
+  dd.cats.forEach(function(cat){
+    var catDone=cat.tasks.filter(function(t){return isDone(selDay,t.id);}).length;
+    html+='<div class="category"><div class="cat-header">'
+      +'<span class="cat-icon">'+cat.icon+'</span>'
+      +'<span class="cat-title">'+cat.title+'</span>'
+      +'<span class="cat-count">'+catDone+' / '+cat.tasks.length+'</span>'
+      +'</div>';
+    cat.tasks.forEach(function(t){html+=taskHTML(selDay,t);});
+    html+='</div>';
+  });
+
+  document.getElementById('dayContent').innerHTML=html;
+}
+
+renderAll();
+</script>
+</body>
+</html>

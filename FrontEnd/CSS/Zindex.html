@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Z index</title>
+    <style>
+
+        div{
+            height: 100px;
+            width: 100px;
+            border: 2px solid black;
+            display: inline-block;
+        }
+
+        #one{
+            background-color: violet;
+            position: relative;
+            z-index: 1;
+            color: aliceblue;
+            font-size: 30px;
+        }
+
+        #two{
+            background-color: indigo;
+            position: relative;
+            z-index: 2;
+            right: 70px;
+            color: aliceblue;
+            font-size: 30px;
+        }
+
+        #three{
+            background-color: blue;
+            position: relative;
+            z-index: 3;
+            color: aliceblue;
+            font-size: 30px;
+            right: 110px;
+        }
+
+        #one:hover{
+            z-index: 4;
+        }
+
+        #two:hover{
+            z-index: 4;
+        }
+
+        #three:hover{
+            z-index: 4;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <h1>
+        Z index
+    </h1>
+
+    <div id="one">1</div>
+    <div id="two">2</div>
+    <div id="three">3</div>
+
+</body>
+</html>
